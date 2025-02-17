@@ -19,6 +19,11 @@ class User {
     static verifyEmail(email, callback) {
         db.run(`UPDATE user SET isVerif = 1, verificationCode = NULL WHERE email = ?`, [email], callback);
     }
+
+    static updatePassword(email, newPassword, callback) {
+        const query = `UPDATE user SET password = ? WHERE email = ?`;
+        db.run(query, [newPassword, email], callback);
+    }
 }
 
 module.exports = User;

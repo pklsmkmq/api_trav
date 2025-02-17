@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const User = require('../models/User');
 require('dotenv').config();
 
@@ -91,3 +92,55 @@ exports.login = (req, res) => {
         });
     });
 };
+
+exports.forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: 'Email is required' });
+        }
+
+        User.findByEmail(email, async (err, user) => {
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            const newPassword = generateRandomPassword();
+
+            // Hash the new password
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+            // Update user's password in the database
+            User.updatePassword(email, hashedPassword, async (err, user) => {
+                transporter.sendMail({
+                    from: process.env.EMAIL_USER,
+                    to: email,
+                    subject: 'Your New Password',
+                    text: `Your new password is ${newPassword}`
+                });
+
+                res.status(200).json({ message: 'New password has been sent to your email' });
+            });
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+function generateRandomPassword() {
+    const letters = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    let password = '';
+
+    for (let i = 0; i < 5; i++) {
+        password += letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+
+    for (let i = 0; i < 3; i++) {
+        password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    }
+
+    return password;
+}
