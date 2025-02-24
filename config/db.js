@@ -18,6 +18,20 @@ db.serialize(() => {
         name TEXT NOT NULL,
         image TEXT NOT NULL
     )`);
+    db.run(`CREATE TABLE IF NOT EXISTS wisata (
+        idwisata INTEGER PRIMARY KEY AUTOINCREMENT,
+        namawisata VARCHAR(255) NOT NULL,
+        gambarwisata VARCHAR(255),
+        hargaWisata INTEGER,
+        ratingWisata FLOAT,
+        deskripsi TEXT,
+        isFav BOOLEAN,
+        Gallery TEXT,
+        idCategory INTEGER,
+        createAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updateAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (idCategory) REFERENCES category(id)
+      )`);
 });
 
 module.exports = db;
