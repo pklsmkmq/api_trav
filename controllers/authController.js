@@ -84,8 +84,7 @@ exports.login = (req, res) => {
             token,
             user: {
                 id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
+                name: user.name,
                 email: user.email,
                 isVerif: user.isVerif
             }
