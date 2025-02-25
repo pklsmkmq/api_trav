@@ -23,7 +23,9 @@ db.serialize(() => {
         namawisata VARCHAR(255) NOT NULL,
         gambarwisata VARCHAR(255),
         hargaWisata INTEGER,
+        lokasiWisata VARCHAR(255),
         ratingWisata FLOAT,
+        
         deskripsi TEXT,
         isFav BOOLEAN,
         Gallery TEXT,

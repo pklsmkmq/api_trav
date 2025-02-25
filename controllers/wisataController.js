@@ -20,16 +20,16 @@ exports.getWisataById = (req, res) => {
 };
 
 exports.createWisata = (req, res) => {
-    const { namawisata, gambarwisata, hargaWisata, ratingWisata, deskripsi, isFav, Gallery, idCategory } = req.body;
+    const { namawisata, gambarwisata, hargaWisata, ratingWisata, lokasiWisata, deskripsi, isFav, Gallery, idCategory } = req.body;
 
     // Validation
-    if (!namawisata || !gambarwisata || !hargaWisata || !ratingWisata || !deskripsi || isFav === undefined || !Gallery || !idCategory) {
+    if (!namawisata || !gambarwisata || !hargaWisata || !ratingWisata || !lokasiWisata || !deskripsi || isFav === undefined || !Gallery || !idCategory) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const query = `INSERT INTO wisata (namawisata, gambarwisata, hargaWisata, ratingWisata, deskripsi, isFav, Gallery, idCategory) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    const params = [namawisata, gambarwisata, hargaWisata, ratingWisata, deskripsi, isFav, Gallery, idCategory];
+    const query = `INSERT INTO wisata (namawisata, gambarwisata, hargaWisata, ratingWisata, lokasiWisata, deskripsi, isFav, Gallery, idCategory) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`; // Added missing value placeholder
+    const params = [namawisata, gambarwisata, hargaWisata, ratingWisata, lokasiWisata, deskripsi, isFav, Gallery, idCategory]; // Added missing value
     db.run(query, params, function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
@@ -40,9 +40,9 @@ exports.createWisata = (req, res) => {
 
 exports.updateWisata = (req, res) => {
     const { id } = req.params;
-    const { namawisata, gambarwisata, hargaWisata, ratingWisata, deskripsi, isFav, Gallery, idCategory } = req.body;
-    const query = `UPDATE wisata SET namawisata = ?, gambarwisata = ?, hargaWisata = ?, ratingWisata = ?, deskripsi = ?, isFav = ?, Gallery = ?, idCategory = ?, updateAt = CURRENT_TIMESTAMP WHERE idwisata = ?`;
-    const params = [namawisata, gambarwisata, hargaWisata, ratingWisata, deskripsi, isFav, Gallery, idCategory, id];
+    const { namawisata, gambarwisata, hargaWisata, ratingWisata, lokasiWisata, deskripsi, isFav, Gallery, idCategory } = req.body;
+    const query = `UPDATE wisata SET namawisata = ?, gambarwisata = ?, hargaWisata = ?, ratingWisata = ?, lokasiWisata = ?, deskripsi = ?, isFav = ?, Gallery = ?, idCategory = ?, updateAt = CURRENT_TIMESTAMP WHERE idwisata = ?`;
+    const params = [namawisata, gambarwisata, hargaWisata, ratingWisata, lokasiWisata, deskripsi, isFav, Gallery, idCategory, id];
     db.run(query, params, function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
